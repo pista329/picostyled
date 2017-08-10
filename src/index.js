@@ -28,20 +28,14 @@ const css = (chunks, interpolations, props) =>
     interpolations[i] && typeof interpolations[i] === 'function'
       ? `${chunk}${interpolations[i](props || {})}`
       : interpolations[i]
-      ? `${chunk}${interpolations[i]}`
-      : chunk
+        ? `${chunk}${interpolations[i]}`
+        : chunk
   ).join('')
-
-const createBaseClass = (properties, selector, media) => {
-  return className
-}
 
 const parse = (rules, child = '', media) => {
   const inlineRules = rules.replace(/^\s+|\s+$|[\t\n\r]*/gm, '') // remove whitespace
-  const selectors = inlineRules.match(/&(.*?){(.*?)}/g) || []
-  const queries = inlineRules.match(/@(.*?){(.*?)}/g) || []
+  const selectors = inlineRules.match(/[&|@](.*?){(.*?)}/g) || []
   const properties = getProperties(rules)
-
   const hash = hashStr(rules)
 
   if (cache[hash]) return cache[hash]
@@ -50,29 +44,28 @@ const parse = (rules, child = '', media) => {
 
   insert(createRule(className, properties))
 
-  cache[hash] = className
-
   selectors
     .map(item => {
       let { selector, props } = parseSelector(item)
+      let rule
 
-      selector = selector.replace(/^&/, className)
+      if (/^@/.test(selector)) {
+        rule = createRule(className, props, selector)
+      } else {
+        selector = selector.replace(/^&/, className)
+        rule = createRule(selector, props)
+      }
 
-      insert(createRule(selector, props))
+      insert(rule)
     })
 
-  queries
-    .map(item => {
-      let { selector, props } = parseSelector(item)
-
-      insert(createRule(className, props, selector))
-    })
+  cache[hash] = className
 
   return className
 }
 
-export default h => tag => (decls, ...interpolations) => (props, children) => {
-  const declarations = css(decls, interpolations, props)
+export default h => tag => (chunks, ...interpolations) => (props, children) => {
+  const declarations = css(chunks, interpolations, props)
 
   return h(tag, { class: parse(declarations) }, children)
 }
