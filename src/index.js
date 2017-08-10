@@ -1,4 +1,3 @@
-import { h } from 'picodom'
 import hashStr from './hash'
 
 let _id = 0
@@ -6,14 +5,11 @@ let cache = {}
 
 const sheet = document.head.appendChild(document.createElement('style')).sheet
 const insert = rule => sheet.insertRule(rule, sheet.cssRules.length)
-
 const createRule = (className, properties, media) => {
   const rule = `.${className}{${properties}}`
 
   return media ? `${media}{${rule}}` : rule
 }
-
-const replaceWhitespace = str => str.replace(/\s|\\n/g, '')
 const getSelector = str => str.match(/[&|@](.*?){/g)[0].replace(/{$/, '')
 const getDeclaration = str => str.match(/{(.*?)}/)[1]
 const getProperties = str => str
@@ -75,7 +71,7 @@ const parse = (rules, child = '', media) => {
   return className
 }
 
-export default tag => (decls, ...interpolations) => (props, children) => {
+export default h => tag => (decls, ...interpolations) => (props, children) => {
   const declarations = css(decls, interpolations, props)
 
   return h(tag, { class: parse(declarations) }, children)

@@ -1,6 +1,7 @@
 import {h, patch} from 'picodom'
-import styled from '../'
+import picostyled from '../'
 
+const styled = picostyled(h)
 let element, oldNode
 
 function render(newNode) {
