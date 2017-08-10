@@ -4,7 +4,7 @@
 
 [![774B gzip][gzip-badge]][bundlesize]
 
-[gzip-badge]: https://img.shields.io/badge/bundled%20&%20gzip-597%20B-brightgreen.svg
+[gzip-badge]: https://img.shields.io/badge/bundled%20&%20gzip-774%20B-brightgreen.svg
 [bundlesize]: https://github.com/siddharthkp/bundlesize
 
 ## Features
