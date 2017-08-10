@@ -3,9 +3,9 @@ import buble from "rollup-plugin-buble"
 
 export default {
   entry: "src/index.js",
-  dest: "dist/picostyle.js",
+  dest: "dist/picostyled.js",
   format: "umd",
-  moduleName: 'picostyle',
+  moduleName: 'picostyled',
   plugins: [
     buble(),
     uglify()

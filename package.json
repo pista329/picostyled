@@ -1,8 +1,8 @@
 {
-  "name": "picostyle",
-  "version": "0.0.4",
-  "description": "Most lightweight CSS in JS library ever.",
-  "main": "dist/picostyle.js",
+  "name": "picostyled",
+  "version": "0.1.0",
+  "description": "Lightweight styled components.",
+  "main": "dist/picostyled.js",
   "jsnext:main": "src/index.js",
   "module": "src/index.js",
   "scripts": {
@@ -13,18 +13,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/morishitter/picostyle.git"
+    "url": "git+https://github.com/idered/picostyled.git"
   },
   "keywords": [
+    "styled-components",
     "css-in-js",
     "picodom"
   ],
-  "author": "Masaaki Morishita",
+  "author": "Kasper Mikiewicz",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/morishitter/picostyle/issues"
+    "url": "https://github.com/idered/picostyled/issues"
   },
-  "homepage": "https://github.com/morishitter/picostyle#readme",
+  "homepage": "https://github.com/idered/picostyled#readme",
   "devDependencies": {
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
@@ -40,8 +41,8 @@
   },
   "bundlesize": [
     {
-      "path": "dist/picostyle.js",
-      "threshold": "650B"
+      "path": "dist/picostyled.js",
+      "threshold": "800B"
     }
   ]
 }

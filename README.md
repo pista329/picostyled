@@ -1,67 +1,60 @@
-# Picostyle
+# Picostyled
 
-> Most lightweight CSS in JS library ever.
+> Lightweight styled components.
 
-[![597B gzip][gzip-badge]][bundlesize]
+[![774B gzip][gzip-badge]][bundlesize]
 
 [gzip-badge]: https://img.shields.io/badge/bundled%20&%20gzip-597%20B-brightgreen.svg
 [bundlesize]: https://github.com/siddharthkp/bundlesize
 
-<div align="center">
-  <a href="https://github.com/morishitter/picostyle">
-    <img width="360px" src="http://morishitter.github.io/picostyle.svg">
-  </a>
-</div>
-<br>
-
 ## Features
 
-- **🚀 Most lightweight CSS in JS library ever**: Only 0.6 KB (bundled & gzipped)
-- **⚡️ Extreme high performance**: Optimized by Virtual CSS inspired by [Styletron](https://ryantsao.com/blog/virtual-css-with-styletron)
+- **🚀 Lightweight CSS in JS library**: Only 0.7 KB (bundled & gzipped)
 - **💅 Styled components**: Returns styled components like [styled-components](https://www.styled-components.com/) that everyone loves :)
 - **❤️ For Picodom**: [Picodom](https://github.com/picodom/picodom) is just 1 KB Virtual DOM builder and patch algorithm
 
-## Installation
-
 ```
-$ npm install picostyle
+$ npm install picostyled
 ```
 
 ## How to use
 
-Picostyle works well with Media Queries (`@media`), Pseudo-element and Pseudo-classes (`:hover`).
+Picostyled works well with Media Queries (`@media`), Pseudo-element and Pseudo-classes (`:hover`).
 
 ```js
-const Text = ps("h1")({
-  fontSize: 64,
-  cursor: "pointer",
-  color: "#fff",
-  padding: "0.4em",
-  transition: "all .2s ease-in-out",
-  ":hover": {
-    transform: "scale(1.3)",
-  },
-  "@media (max-width: 450px)": {
-    fontSize: 32,
-  },
-})
+const themeColor = '#00897b'
+const Text = styled('h1')`
+  font-size: ${props => props.small ? '32px' : '64px'};
+  cursor: pointer;
+  color: white;
+  margin: .1em 0;
+  transition: all .2s ease-in-out;
 
-const Wrapper = ps("div")({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  width: "100vw",
-  height: "100vh",
-  backgroundColor: keyColor,
-})
+  &:hover {
+    transform: scale(1.3);
+  }
+
+  @media (max-width: 450px) {
+    font-size: 32px;
+  }
+`
+
+const Wrapper = styled('div')`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  background-color: ${themeColor};
+`
 
 return (
   <Wrapper>
-    <Text>{state.trim() === "" ? ":)" : state}</Text>
+    <Text>{state.trim() === '' ? ':)' : state}</Text>
+    <Text small>components</Text>
   </Wrapper>
 )
 ```
 
-Perfect example with Picodom and webpack is [here](https://github.com/morishitter/picostyle/tree/master/example).
-
-[Try it online](https://codepen.io/morishitter/pen/qXaPYQ?editors=0010)! :D
+Perfect example with Picodom and webpack is [here](https://github.com/idered/picostyled/tree/master/example).
