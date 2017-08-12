@@ -1,48 +1,24 @@
-import hashStr from './hash'
+import {
+  hashString, getProperties, parseSelector, getValidAttributes, css
+} from './utils'
 
 let _id = 0
 let cache = {}
 
 const sheet = document.head.appendChild(document.createElement('style')).sheet
 const insert = rule => sheet.insertRule(rule, sheet.cssRules.length)
+const generateName = str => `p${(_id++).toString(36)}`
 const createRule = (className, properties, media) => {
   const rule = `.${className}{${properties}}`
 
   return media ? `${media}{${rule}}` : rule
 }
-const getSelector = str => str.match(/[&|@](.*?){/g)[0].replace(/{$/, '')
-const getDeclaration = str => str.match(/{(.*?)}/)[1]
-const getProperties = str => str
-  .replace(/[&|@](.*?){(.*?)}/g, '') // remove selectors
-  .split(/;/) // split properties
-  .filter(Boolean)
-  .join(';')
-const parseSelector = str => ({
-  selector: getSelector(str),
-  props: getProperties(getDeclaration(str))
-})
-const generateName = str => `p${(_id++).toString(36)}`
-const getValidAttributes = (props, el) => Object.keys(props)
-  .filter(prop => prop in el)
-  .reduce((all, attr) => {
-    all[attr] = props[attr]
-    return all
-  }, {})
-
-const css = (chunks, interpolations, props) =>
-  chunks.map((chunk, i) =>
-    interpolations[i] && typeof interpolations[i] === 'function'
-      ? `${chunk}${interpolations[i](props || {})}`
-      : interpolations[i]
-        ? `${chunk}${interpolations[i]}`
-        : chunk
-  ).join('')
 
 const parse = (rules, child = '', media) => {
   const inlineRules = rules.replace(/^\s+|\s+$|[\t\n\r]*/gm, '') // remove whitespace
   const selectors = inlineRules.match(/[&|@](.*?){(.*?)}/g) || []
   const properties = getProperties(rules)
-  const hash = hashStr(rules)
+  const hash = hashString(rules)
 
   if (cache[hash]) return cache[hash]
 
@@ -51,18 +27,15 @@ const parse = (rules, child = '', media) => {
   insert(createRule(className, properties))
 
   selectors
-    .map(item => {
+    .forEach(item => {
       let { selector, props } = parseSelector(item)
-      let rule
 
       if (/^@/.test(selector)) {
-        rule = createRule(className, props, selector)
+        insert(createRule(className, props, selector))
       } else {
         selector = selector.replace(/^&/, className)
-        rule = createRule(selector, props)
+        insert(createRule(selector, props))
       }
-
-      insert(rule)
     })
 
   cache[hash] = className
@@ -73,12 +46,11 @@ const parse = (rules, child = '', media) => {
 export default h => tag => (chunks, ...interpolations) => (props, children) => {
   props = props || {}
 
-  const el = document.createElement(tag)
-  const declarations = css(chunks, interpolations, props)
-  const className = parse(declarations)
-  const validAttributes = getValidAttributes(props, el)
-  const data = Object.assign({}, validAttributes, {
-    class: props.className ? `${props.className} ${className}` : className
+  const className = parse(css(chunks, interpolations, props))
+  const attributes = getValidAttributes(props, document.createElement(tag))
+
+  const data = Object.assign({}, attributes, {
+    class: [props.className, className].filter(Boolean).join('')
   })
 
   return h(tag, data, children)
