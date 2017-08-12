@@ -22,6 +22,12 @@ const parseSelector = str => ({
   props: getProperties(getDeclaration(str))
 })
 const generateName = str => `p${(_id++).toString(36)}`
+const getValidAttributes = (props, el) => Object.keys(props)
+  .filter(prop => prop in el)
+  .reduce((all, attr) => {
+    all[attr] = props[attr]
+    return all
+  }, {})
 
 const css = (chunks, interpolations, props) =>
   chunks.map((chunk, i) =>
@@ -65,7 +71,15 @@ const parse = (rules, child = '', media) => {
 }
 
 export default h => tag => (chunks, ...interpolations) => (props, children) => {
-  const declarations = css(chunks, interpolations, props)
+  props = props || {}
 
-  return h(tag, { class: parse(declarations) }, children)
+  const el = document.createElement(tag)
+  const declarations = css(chunks, interpolations, props)
+  const className = parse(declarations)
+  const validAttributes = getValidAttributes(props, el)
+  const data = Object.assign({}, validAttributes, {
+    class: props.className ? `${props.className} ${className}` : className
+  })
+
+  return h(tag, data, children)
 }
