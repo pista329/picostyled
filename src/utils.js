@@ -1,5 +1,4 @@
 // murmurhash2 via https://gist.github.com/raycmorgan/588423
-
 export function hashString(str, seed) {
   let hash = 0
   let i
@@ -9,7 +8,7 @@ export function hashString(str, seed) {
 
   for (i = 0; i < str.length; i++) {
     chr = str.charCodeAt(i)
-    hash = ((hash << 5) - hash) + chr
+    hash = (hash << 5) - hash + chr
     hash |= 0
   }
 
@@ -35,20 +34,19 @@ export function parseSelector(str) {
 }
 
 export function getValidAttributes(props, el) {
-  return Object.keys(props)
-    .filter(prop => prop in el)
-    .reduce((all, attr) => {
-      all[attr] = props[attr]
-      return all
-    }, {})
+  return Object.keys(props).filter(prop => prop in el).reduce((all, attr) => {
+    all[attr] = props[attr]
+    return all
+  }, {})
 }
 
 export function css(chunks, interpolations, props) {
-  return chunks.map((chunk, i) =>
-    interpolations[i] && typeof interpolations[i] === 'function'
-      ? `${chunk}${interpolations[i](props || {})}`
-      : interpolations[i]
-        ? `${chunk}${interpolations[i]}`
-        : chunk
-  ).join('')
+  return chunks
+    .map(
+      (chunk, i) =>
+        interpolations[i] && typeof interpolations[i] === 'function'
+          ? `${chunk}${interpolations[i](props || {})}`
+          : interpolations[i] ? `${chunk}${interpolations[i]}` : chunk
+    )
+    .join('')
 }

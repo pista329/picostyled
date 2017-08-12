@@ -1,5 +1,9 @@
 import {
-  hashString, getProperties, parseSelector, getValidAttributes, css
+  hashString,
+  getProperties,
+  parseSelector,
+  getValidAttributes,
+  css
 } from './utils'
 
 let _id = 0
@@ -26,17 +30,16 @@ const parse = (rules, child = '', media) => {
 
   insert(createRule(className, properties))
 
-  selectors
-    .forEach(item => {
-      let { selector, props } = parseSelector(item)
+  selectors.forEach(item => {
+    let {selector, props} = parseSelector(item)
 
-      if (/^@/.test(selector)) {
-        insert(createRule(className, props, selector))
-      } else {
-        selector = selector.replace(/^&/, className)
-        insert(createRule(selector, props))
-      }
-    })
+    if (/^@/.test(selector)) {
+      insert(createRule(className, props, selector))
+    } else {
+      selector = selector.replace(/^&/, className)
+      insert(createRule(selector, props))
+    }
+  })
 
   cache[hash] = className
 
