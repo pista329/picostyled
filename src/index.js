@@ -21,7 +21,7 @@ const createRule = (className, properties, media) => {
 const parse = (rules, child = '', media) => {
   const inlineRules = rules.replace(/^\s+|\s+$|[\t\n\r]*/gm, '') // remove whitespace
   const selectors = inlineRules.match(/[&|@](.*?){(.*?)}/g) || []
-  const properties = getProperties(rules)
+  const properties = getProperties(inlineRules)
   const hash = hashString(rules)
 
   if (cache[hash]) return cache[hash]
