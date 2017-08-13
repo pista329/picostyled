@@ -1,6 +1,6 @@
 {
   "name": "picostyled",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Lightweight styled components.",
   "main": "dist/picostyled.js",
   "jsnext:main": "src/index.js",
