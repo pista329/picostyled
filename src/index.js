@@ -53,7 +53,8 @@ export default h => tag => (chunks, ...interpolations) => (props, children) => {
   const attributes = getValidAttributes(props, document.createElement(tag))
 
   const data = Object.assign({}, attributes, {
-    class: [props.className, className].filter(Boolean).join('')
+    class: [props.className, className].filter(Boolean).join(''),
+    ref: props.innerRef || null
   })
 
   return h(tag, data, children)
